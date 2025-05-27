@@ -5,4 +5,5 @@ beautifulsoup4==4.12.2
 aiohttp==3.8.6
 lxml==4.9.3
 python-dotenv==1.0.0
-sse-starlette==1.6.5 
+sse-starlette==1.6.5
+gunicorn==21.2.0 

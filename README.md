@@ -90,6 +90,13 @@ This application is ready to be deployed to Render.com:
 1. Push your code to a Git repository
 2. Create a new Web Service in Render
 3. Connect your repository
-4. Set the build command to `pip install -r requirements.txt`
-5. Set the start command to `uvicorn main:app --host 0.0.0.0 --port $PORT`
-6. Deploy! 
+4. Render will automatically use these settings:
+   - Build Command: `pip install -r requirements.txt`
+   - Start Command: `uvicorn main:app --host 0.0.0.0 --port $PORT`
+5. Alternatively, you can specify a custom start command:
+   - `gunicorn -k uvicorn.workers.UvicornWorker main:app`
+
+If you're having issues with Render's deployment, make sure:
+1. Your Render service is configured to use the correct start command
+2. You have the render.yaml file in your repository
+3. Gunicorn is included in your requirements.txt 

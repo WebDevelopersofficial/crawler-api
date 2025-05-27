@@ -8,7 +8,7 @@ import httpx
 from bs4 import BeautifulSoup
 from fastapi import FastAPI, HTTPException, BackgroundTasks
 from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel, HttpUrl
+from pydantic import BaseModel, AnyHttpUrl, validator
 from sse_starlette.sse import EventSourceResponse
 
 app = FastAPI(title="Web Crawler API")
@@ -23,9 +23,19 @@ app.add_middleware(
 )
 
 class CrawlRequest(BaseModel):
-    url: HttpUrl
+    url: str
     respect_robots_txt: bool = False
     max_urls: int = 1000
+
+    @validator('url')
+    def validate_url(cls, v):
+        try:
+            parsed = urlparse(v)
+            if not parsed.scheme or not parsed.netloc:
+                raise ValueError("Invalid URL format")
+            return v
+        except Exception:
+            raise ValueError("Invalid URL format")
 
 # Global variables to store crawl state
 crawl_tasks = {}
